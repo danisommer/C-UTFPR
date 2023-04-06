@@ -1,15 +1,13 @@
-#include<stdio.h>
+# include <stdio.h >
 
-int main(){
+int main (){
+    int idade , matricula , cod;
+    float peso;
 
-    float numero, potencia;
-    printf("Digite um numero qualquer\n");
-    scanf("%f", &numero);
+     scanf ("%d", cod); //o certo é &cod
+     scanf ("%d %f", &peso, &idade); //o certo é "%f %d"
+     scanf ("%d", &Matricula); //o certo é &matricula
+     printf ("%d", &cod); //o certo é cod
 
-     potencia =  numero*numero*numero;
-
-     printf("seu numero ao cubo eh: %.2f", potencia);
-
-    return 0;
-
-}
+     return 0;
+ }

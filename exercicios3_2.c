@@ -1,27 +1,14 @@
 #include<stdio.h>
-#include <stdlib.h>
-#include <time.h>
 
 int main (){
 
-    srand(time(0));
+    int numero, invertido;
+    printf("Escreva um numero entre 100 e 999: ");
+    scanf("%d", &numero);
 
-    int random_number = rand() % 999 + 100, reverse = 0, rem;
-
-    printf("O numero aleatorio eh: %d\n", random_number);
-
-    while (random_number != 0) {
-
-        rem = random_number%10;
-        reverse = reverse * 10 + rem;
-        random_number/=10;
-
-
-    }
-
-    printf("Numero invertido: %d ", reverse);
-
-
+    invertido = ((numero%10)*100)+numero-(numero/100)*100-(numero%10)+numero/100;
+    printf("%d", invertido);
+    
     return 0;
 
 }
