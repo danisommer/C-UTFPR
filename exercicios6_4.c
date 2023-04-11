@@ -1,20 +1,24 @@
 #include <stdio.h>
 
 int main (){
+    int i, n, soma;
+    scanf ("%d", &n);
+    soma = 0;
 
-    int n1= 1, soma = 0, num;
-    scanf("%d", &num);
-
-    while (n1>num){
-        n1++;
-        if(num%n1==0){
-        soma = soma + (num/n1);
-        printf("%f", soma);
+    for (i = 1; i <= n/2; i++){
+        if (n % i == 0){
+            soma += i; 
         }
+    }
+    if (soma == n){
+        printf ("Eh perfeito");  
+    } else {
+        printf ("Nao eh perfeito");
     }
 
     return 0;
 }
+
 
 
 /*

@@ -24,3 +24,12 @@ int main (){
     return 0;
 
 }
+
+
+/*
+(**) 3. Em uma competição de saltos ornamentais, 6 juízes dão suas notas, que podem variar entre 0 e
+10 (incluindo valores “quebrados”). A nota final do atleta deve excluir a maior e a menor nota dos
+juízes e é composta pela média das quatro notas restantes - esta é uma variação simples de um
+conceito conhecido como “média truncada”. Faça um programa que lê do usuário as seis notas dos
+juízes e informa a nota final do atleta.
+*/
