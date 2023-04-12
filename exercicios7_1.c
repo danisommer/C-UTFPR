@@ -8,10 +8,10 @@ int main (){
    while (num>1){
 
         fat = fat * num;
-        printf("%d\n", fat);
         num--;
 
    }
+   printf("%d\n", fat);
 
     return 0;
 }

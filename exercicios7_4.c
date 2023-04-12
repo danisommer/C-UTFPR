@@ -2,29 +2,45 @@
 
 int main (){
 
-    int numero, digito, pot = 1, resto=0, aux=0, i=1;
-    scanf("%d %d", &numero, &digito);
+    int numero, digito, achou = 2;
 
-    while (i<numero){
+    printf("Digite o numero: ");
+    scanf("%d", &numero);
+    printf("Digite o digito: ");
+    scanf("%d", &digito);
 
-        pot = pot * 10;
-        aux = resto;
-        resto = (numero % pot) - aux;
+    while (achou == 2){
+     
+        if (numero % 10 == digito){
 
-        if (resto == digito){
-
-            printf("Tem o digito");
-            return 0;
+            achou = 1;
 
         } else {
 
-        i=i*10;
-        printf("n Tem o digito");
-        return 0;
+            numero /= 10;
+
+        }
+
+        if (numero <= 10 && numero % 10 != digito){
+
+            achou = 0;
 
         }
 
     }
+
+    if(achou == 1){
+
+        printf("Tem o digito\n");
+
+    }
+
+    if(achou == 0){
+
+        printf("Nao tem o digito\n");
+
+    }
+
     return 0;
 
 
@@ -33,11 +49,10 @@ int main (){
 
 /*
 
-4527425 4
-
 (**) 4. Escreva um programa que lê um inteiro positivo e um dígito. O programa deve verificar se o
 número dado contém o dígito em qualquer posição. Não é preciso dizer qual a posição, apenas indicar
 se o dígito está ou não presente.
+
 */
 
 
