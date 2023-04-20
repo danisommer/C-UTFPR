@@ -8,12 +8,11 @@ double casasDecimais (double x){
 
 
 }
-/* teste
+
 int main (){
 
-    printf("%f", casasDecimais(4.688));
+    printf("%f", casasDecimais(4.684578));
 
 
     return 0;
 }
-*/

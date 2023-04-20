@@ -10,11 +10,10 @@ unsigned int inverteNum (unsigned int n){
     }
     return invertido;
     }
-/* teste
+
 int main (){
 
-    printf("%d", inverteNum(1124));
+    printf("%d", inverteNum(953));
 
     return 0;
 }
-*/

@@ -2,7 +2,7 @@
 
 unsigned long long potencia (unsigned int base, unsigned int expoente){
 
-    int resultado=1, i;
+   unsigned int resultado=1, i;
 
     for(i=0; i<expoente; i++){
         resultado *= base;
@@ -11,12 +11,11 @@ unsigned long long potencia (unsigned int base, unsigned int expoente){
     return resultado;
 
 }
-/*
+
 int main (){
 
-    printf("%d", potencia(5,2)); //retorna 25 (5 elevado a 2)
+    printf("%llu", potencia(2,10)); 
 
 
     return 0;
 }
-*/

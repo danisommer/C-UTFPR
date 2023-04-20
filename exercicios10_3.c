@@ -17,7 +17,7 @@ int proxFibonacci (int n){
     }
 
 }
-/* teste
+
 int main (){
 
     printf("%d ", proxFibonacci(15));
@@ -25,4 +25,3 @@ int main (){
     return 0;
 }
 
-*/

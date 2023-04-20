@@ -22,16 +22,16 @@ int arredonda (double x){
     return numero;
 
 }
-/* teste
+
 int main (){
 
-    printf("%d", arredonda(-6.7));
+    printf("%d", arredonda(1.8));
 
     return 0;
 
 }
 
-
+/*
 Escreva uma função que arredonda um valor dado. O número
 deve ser arredondado para o inteiro mais próximo. Se o número for equidistante de dois inteiros, deve
 ser arredondado para o valor de maior magnitude. Ou seja, 1.5 é arredondado para 2, e -1.5 é

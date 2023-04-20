@@ -2,9 +2,9 @@
 
 int testaTipoChar (char c){
 
-    if (c>=0x41 && c<= 0x5A){
+    if (c>='A' && c<= 'Z'){
 
-        if(c==0x41||c==0x45||c==0x49||c==0x4F||c==0x55){
+        if(c=='A'||c=='E'||c=='I'||c=='O'||c=='U'){
 
             return 1;
 
@@ -15,9 +15,9 @@ int testaTipoChar (char c){
         }
 
 
-    } else if(c>=0x61 && c<= 0x7A) {
+    } else if(c>='a' && c<= 'z') {
 
-        if(c==0x61||c==0x65||c==0x69||c==0x6F||c==0x75){
+        if(c=='a'||c=='e'||c=='i'||c=='o'||c=='u'){
 
             return 2;
 
@@ -27,7 +27,7 @@ int testaTipoChar (char c){
 
         }
 
-    } else if (c>=0x30 && c<= 0x39){
+    } else if (c>='0' && c<= '9'){
 
         return 5;
 
@@ -41,7 +41,7 @@ int testaTipoChar (char c){
 
 int main (){
 
-    printf("%d", testaTipoChar(0x33));
+    printf("%d", testaTipoChar('#'));
 
     return 0;
 }
