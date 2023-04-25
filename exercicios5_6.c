@@ -1,3 +1,4 @@
+/*
 (***) 6. O Guia do Mochileiro das Galáxias diz que os aarghs são seres muito inteligentes, com cabeça
 grande, pele escamosa, e 3 tentáculos. Os aarghs possuem um raciocínio matemático bastante
 sofisticado. Diferente de seres inferiores, como os terráqueos, os aarghs não contam considerando
@@ -23,3 +24,4 @@ d) Qual número equivale à configuração de tentáculos ↑↑↑? >>> 111
 e) Qual número equivale à configuração de tentáculos →→↑? >>> 221
 f) O maior número que os humanos costumam representar usando os 10 dedos das mãos é 10. Qual o
 maior número que um aargh pode representar usando os seus 3 tentáculos? >>> 444
+*/

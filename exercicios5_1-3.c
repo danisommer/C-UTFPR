@@ -1,3 +1,4 @@
+/*
 1. Converta os seguintes números (na base 10) para as representações binária e hexadecimal:
 a) 250  -> 1111 1010
 b) 63  -> 0011 1111
@@ -20,3 +21,4 @@ a) (133 & 122) | 13 -> 0000 1101 (13)
 b) (!foo) (onde foo é uma variável do tipo char com valor igual a 3) -> 1111 1100 
 c) (x <= 0 && x > 10) (onde x é uma variável do tipo int) -> 0
 d) (200 | 6) ^ (30 & 0x08) -> 01100110
+*/

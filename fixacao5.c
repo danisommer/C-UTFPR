@@ -1,4 +1,4 @@
-1. Converta os seguintes números (na base 10) para as representações binária e hexadecimal:
+/*1. Converta os seguintes números (na base 10) para as representações binária e hexadecimal:
 a) 9    8 + 1 = 2^3 + 2^0 = 0000 1001
 b) 10   8 + 2 = 2^3 + 2^1 = 0000 1010
 c) 11   8 + 2 + 1 = 2^3 + 2^1 + 2^0 = 0000 1011
@@ -23,3 +23,4 @@ e) 0x55 = 0101 0101 (85)
 (0xF0 | ~0x0F) ^ (0xC0 & 0x83)
                  
 0111 0000, 0x70, (112)
+*/
