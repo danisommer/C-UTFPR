@@ -8,12 +8,12 @@ int crescente(int vetor[])
         if (vetor[i]>=vetor[i+1])
             return 0;
 
-    }   
+    }
     return 1;
 }
 int main ()
 {
-    int vetor[N] = {10, 20, 30, 40, 50};
+    int vetor[N] = {11.6, 23, -9, 50, -1};
     printf("%d", crescente(vetor));
     return 0;
 }
