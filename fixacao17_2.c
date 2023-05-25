@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define LIN 6
-#define COL 6
+#define COL 10
 
 int main ()
 {
-    int matriz[LIN][COL], i, j, lin = 2, col = 3, soma = 0;
+    int matriz[LIN][COL], i, j, lin = 1, col = 2, soma = 0;
 
     for(i=0; i<LIN; i++)
         for(j=0; j<COL; j++)
@@ -25,7 +25,6 @@ int main ()
     for(i=0; i < COL; i++)
         soma+=matriz[lin][i];
     
-        
     soma-=matriz[lin][col];
 
     printf("%d", soma);

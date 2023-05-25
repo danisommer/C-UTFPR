@@ -19,7 +19,7 @@ int main ()
     }
     printf("\n");
 
-        for(i=0; i<LIN; i++)
+    for(i=0; i<LIN; i++)
         for(j=0; j<COL; j++)
             transposta[j][i]=matriz[i][j];
 
@@ -29,7 +29,5 @@ int main ()
             printf("%d ", transposta[i][j]);
         printf("\n");
     }
-
-
     return 0;
 }
