@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define MAX 1024
 
 char* empacotaString (char *string)
 {
@@ -17,10 +18,12 @@ char* empacotaString (char *string)
 }
 int main()
 {
-    char string[]="ola tudo bem", *empacotada;
+    char string[MAX], *empacotada;
+    fgets (string, MAX, stdin);
 
     empacotada = empacotaString(string);
-    printf("%lu", strlen(empacotada));
+    printf("\n%s", empacotada);
+
     free(empacotada);
 
     return 0;
