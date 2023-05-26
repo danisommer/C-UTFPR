@@ -9,17 +9,17 @@ int main ()
     int i, j, k;
     char string [] = {"CANETAAZUL"};
     char matriz [N_LINHAS][N_COLUNAS] = {"RHHEEIOYHMBE",
-                                        "RNRYSENTOKWS",
-                                        "IAIMITCGWVSR",
-                                        "NHRNAURHEABK",
-                                        "RTARUHETTNAO",
-                                        "AACAWRFBCZUL",
-                                        "LMDCPNHMSATE",
-                                        "TSEGNNSDLSHA",
-                                        "CANETAAZULRF",
-                                        "IDRENAOBELRC",
-                                        "LTYETOTIFCEA",
-                                        "OFKAARATWANP"};
+                                         "RNRYSENTOKWS",
+                                         "IAIMITCGWVSR",
+                                         "NHCANETAAZUL",
+                                         "RTARUHETTNAO",
+                                         "AACAWRFBCZUL",
+                                         "LMDCPNHMSATE",
+                                         "TSEGNNSDLSHA",
+                                         "CAOEDCQOFLRF",
+                                         "IDRENAOBELRC",
+                                         "LTYETOTIFCEA",
+                                         "OFKAARATWANP"};
 
     for (i = 0; i < N_LINHAS; i++) {
         for (j = 0; j < N_COLUNAS; j++) {
