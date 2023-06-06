@@ -3,8 +3,8 @@
 #include <time.h>
 
 #define N_TESTES 100
-#define LARGURA 10
-#define ALTURA 10
+#define LARGURA 15
+#define ALTURA 15
 #define MIN_OK 15
 #define MAX_OK 18
 
