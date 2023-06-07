@@ -22,11 +22,25 @@ GSImage* criaGSImage(int largura, int altura)
     return imagem;
 }
 
-GSImage* reduzPelaMetade (GSImage* img)
+GSImage* reduzPelaMetade(GSImage* img)
 {
     int alt = img->altura;
     int lar = img->largura;
-    GSImage* imagem = criaGSImage(lar/2, alt/2);
+    GSImage* imagem = criaGSImage(lar / 2, alt / 2);
+
+    for (int i = 0; i < lar / 2; i++)
+    {
+        for (int j = 0; j < alt / 2; j++)
+        {
+            int pixel1 = img->dados[i * 2][j * 2];
+            int pixel2 = img->dados[i * 2][j * 2 + 1];
+            int pixel3 = img->dados[i * 2 + 1][j * 2];
+            int pixel4 = img->dados[i * 2 + 1][j * 2 + 1];
+
+            imagem->dados[i][j] = (pixel1 + pixel2 + pixel3 + pixel4) / 4;
+        }
+    }
+
     return imagem;
 }
 
@@ -39,29 +53,35 @@ void destroiGSImage(GSImage* img)
 }
 int main()
 {
-    int largura = 4;
-    int altura = 6;
+    int largura = 8;
+    int altura = 4;
 
     GSImage* imagem = criaGSImage(largura, altura);
+    GSImage* reduzida;
 
+    for (int i = 0; i < largura; i++)
+        for (int j = 0; j < altura; j++)
+            imagem->dados[i][j] = rand()%10;
+    
     for (int i = 0; i < largura; i++)
     {
         for (int j = 0; j < altura; j++)
-        {
-            imagem->dados[i][j] = rand()%10;
-        }
+            printf("%d ", imagem->dados[i][j]);
+        printf("\n");
     }
 
-    for (int i = 0; i < largura; i++)
+    reduzida = reduzPelaMetade (imagem);
+    printf("\n");
+
+    for (int i = 0; i < largura/2; i++)
     {
-        for (int j = 0; j < altura; j++)
-        {
-            printf("%d ", imagem->dados[i][j]);
-        }
+        for (int j = 0; j < altura/2; j++)
+            printf("%d ", reduzida->dados[i][j]);
         printf("\n");
     }
 
     destroiGSImage(imagem);
+    destroiGSImage(reduzida);
 
     return 0;
 }

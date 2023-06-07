@@ -19,23 +19,17 @@ typedef struct
 
 void corrigeProva(Candidato* c, int** gabarito, int n_questoes, int n_itens)
 {
-    int valorItem = 100 / (n_itens * n_questoes);
-    int nota = 0;
-    int i, j;
+    int valorItem = 100 / (n_itens * n_questoes), nota = 0, i, j;
 
     for (i = 0; i < n_questoes; i++)
-    {
         for (j = 0; j < n_itens; j++)
-        {
             if (c->prova[i][j] == -1)
                 continue;
             else if (c->prova[i][j] == gabarito[i][j])
                 nota += valorItem;
             else if (c->prova[i][j] != gabarito[i][j] && nota > 0)
                 nota -= valorItem;
-        }
-    }
-
+    
     c->nota = nota;
      printf("Nota do candidato %s: %.2f\n", c->nome, c->nota);
 }
@@ -43,14 +37,9 @@ void corrigeProva(Candidato* c, int** gabarito, int n_questoes, int n_itens)
 void convocaParaFase2(char* nome, char* email, float nota)
 {
     if (nota >= NOTA_FASE2)
-    {
         printf("Parabens, %s! Voce foi convocado(a) para a segunda fase do concurso.\n", nome);
-        printf("Por favor, verifique seu e-mail (%s) para mais informacoes.\n", email);
-    }
     else
-    {
         printf("Desculpe, %s. Seu desempenho nao atingiu a nota minima para a segunda fase do concurso.\n", nome);
-    }
 }
 
 void computaResultados(Candidato* candidatos, int n, int** gabarito)
@@ -76,14 +65,8 @@ int main()
     srand(time(NULL));
 
     for (i = 0; i < N_QUESTOES; i++)
-    {
         for (j = 0; j < N_ITENS; j++)
-        {
             gabarito[i][j] = rand() % 2;
-        }
-    }
-
-    // Preencha o vetor de candidatos com informações
 
     for (i = 0; i < 10; i++)
     {
@@ -95,8 +78,6 @@ int main()
 
         for (j = 0; j < N_QUESTOES; j++)
             candidatos[i].prova[j] = (int*)malloc(N_ITENS * sizeof(int));
-
-        // Preencha as informações do candidato (nome, email, endereço) e a prova dele
 
         printf("Candidato %d\n", candidatos[i].numero);
         printf("Nome: ");
@@ -125,12 +106,8 @@ int main()
 
     computaResultados(candidatos, 10, gabarito);
 
-    // Libere a memória alocada
-
     for (i = 0; i < N_QUESTOES; i++)
-    {
         free(gabarito[i]);
-    }
     free(gabarito);
 
     for (i = 0; i < 10; i++)
@@ -138,10 +115,8 @@ int main()
         free(candidatos[i].nome);
         free(candidatos[i].email);
         free(candidatos[i].endereco);
-
         for (j = 0; j < N_QUESTOES; j++)
             free(candidatos[i].prova[j]);
-
         free(candidatos[i].prova);
     }
 
