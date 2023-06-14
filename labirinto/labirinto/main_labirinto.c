@@ -17,45 +17,63 @@
 #define CAMINHO -1
 
 /*===========================================================================*/
+/* TIPOS                                                                     */
+/*===========================================================================*/
+
+typedef struct
+{
+    int** mat;
+    int w;
+    int h;
+
+} Labirinto;
+
+/*---------------------------------------------------------------------------*/
+
+typedef struct
+{
+    int x;
+    int y;
+
+} Coordenada2D;
+
+/*===========================================================================*/
 /* FUNÇÕES                                                                   */
 /*===========================================================================*/
 
-int** carregaLabirinto (char* filename, int* w, int* h, int* x_rato, int* y_rato, int* x_queijo, int* y_queijo);
-void mostraLabirinto (int** lab, int w, int h, int x_rato, int y_rato, int x_queijo, int y_queijo);
-void preencheMatrizCusto (int** m, int w, int h, int x_queijo, int y_queijo);
+Labirinto* carregaLabirinto (char* filename, Coordenada2D* rato, Coordenada2D* queijo);
+void destroiLabirinto (Labirinto* lab);
+void mostraLabirinto (Labirinto* lab, Coordenada2D pos_rato, Coordenada2D pos_queijo);
+void preencheMatrizCusto (Labirinto* lab, Coordenada2D pos_queijo);
 void imprimeMatriz (int** m, int w, int h);
-int calculaCaminho (int** m, int w, int h, int x_rato, int y_rato, int** caminho_x, int** caminho_y);
-void mostraCaminho (int** m, int w, int h, int x_queijo, int y_queijo, int* caminho_x, int* caminho_y, int tam);
+Coordenada2D* calculaCaminho (Labirinto* lab, Coordenada2D pos_rato, int* tam);
+void mostraCaminho (Labirinto* lab, Coordenada2D pos_queijo, Coordenada2D* caminho, int tam);
 
 /*===========================================================================*/
 
 int main ()
 {
-    int i;
-    int **lab; // Matriz que representa o labirinto.
-    int w, h; // Largura e altura do labirinto.
-    int *caminho_x, *caminho_y; // Coordenadas x e y do caminho.
-    int rato_x, rato_y; // Posição do rato.
-    int queijo_x, queijo_y; // Posição do queijo.
-    int tam; // Tamanho do caminho.
+    Labirinto* lab; // Um labirinto.
+    Coordenada2D* caminho; // Vetor de coordenadas.
+    int tam_caminho; // Tamanho do caminho.
+    Coordenada2D pos_rato; // Posição do rato.
+    Coordenada2D pos_queijo; // Posição do queijo.
 
-    lab = carregaLabirinto (FILENAME, &w, &h, &rato_x, &rato_y, &queijo_x, &queijo_y);
+    lab = carregaLabirinto (FILENAME, &pos_rato, &pos_queijo);
     if (!lab)
     {
         printf ("Erro abrindo %s\n", FILENAME);
         return 1;
     }
 
-    preencheMatrizCusto (lab, w, h, queijo_x, queijo_y);
-    tam = calculaCaminho (lab, w, h, rato_x, rato_y, &caminho_x, &caminho_y);
-    mostraCaminho (lab, w, h, queijo_x, queijo_y, caminho_x, caminho_y, tam);
+    preencheMatrizCusto (lab, pos_queijo);
+    imprimeMatriz(lab->mat,lab->w, lab->h);
+    caminho = calculaCaminho (lab, pos_rato, &tam_caminho);
+    mostraCaminho (lab, pos_queijo, caminho, tam_caminho);
 
     // Desaloca tudo.
-    for (i = 0; i < h; i++)
-        free (lab [i]);
-    free (lab);
-    free (caminho_x);
-    free (caminho_y);
+    destroiLabirinto (lab);
+    free (caminho);
 
     return 0;
 }
@@ -65,103 +83,117 @@ int main ()
  * de acordo com a especificação (i.e. não estou testando muita coisa...).
  *
  * Parâmetros: char* filename: arquivo para abrir.
- *             int* w, int* h: parâmetros de saída, largura/altura do labirinto.
+ *             Coordenada2D* rato: parâmetro de saída para a posição do rato.
+ *             Coordenada2D* queijo: idem para a posição do queijo.
  *
- * Valor de retorno: uma matriz de int alocada dinamicamente, preenchida como
-                     explicado na especificação do problema do labirinto. */
+ * Valor de retorno: ponteiro para uma nova instância de Labirinto, com a
+                     matriz preenchida como explicado na especificação. */
 
-int** carregaLabirinto (char* filename, int* w, int* h, int* x_rato, int* y_rato, int* x_queijo, int* y_queijo)
+Labirinto* carregaLabirinto (char* filename, Coordenada2D* rato, Coordenada2D* queijo)
 {
     int i, j;
     char foostring [BUFLEN];
     FILE* f;
-    int** m;
+    Labirinto* lab;
 
     f = fopen (filename, "r");
     if (!f)
         return NULL;
 
     // Inicializa o rato e o queijo.
-    *x_rato = -1;
-    *y_rato = -1;
-    *x_queijo = -1;
-    *y_queijo = -1;
+    rato->x = -1;
+    rato->y = -1;
+    queijo->x = -1;
+    queijo->y = -1;
 
     // Lê a primeira linha.
     if (!fgets (foostring, BUFLEN, f))
         return NULL;
-    *w = strlen (foostring)-1;
-    foostring [*w] = 0;
 
-    // Aloca a matriz com um número temporário de linhas "lixo".
-    m = (int**) malloc (sizeof (int*) * BUFLEN);
+    lab = (Labirinto*) malloc (sizeof (Labirinto)); // Cria o labirinto.
+    lab->w = strlen (foostring)-1;
+    foostring [lab->w] = 0;
+
+    // Aloca a matriz com um número temporário de linhas.
+    lab->mat = (int**) malloc (sizeof (int*) * BUFLEN);
 
     // Enquanto tiver linhas para ler, vai lendo!
     for (i = 0; foostring [0]; i++)
     {
         // Coloca a linha lida na matriz.
-        m [i] = (int*) malloc (sizeof (int) * *w);
-        for (j = 0; j < *w; j++)
+        lab->mat [i] = (int*) malloc (sizeof (int) * lab->w);
+        for (j = 0; j < lab->w; j++)
         {
             // Rato? (não estou verificando se tem mais que 1 rato!)
             if (foostring [j] == 'r' || foostring [j] == 'R')
             {
-                *y_rato = i;
-                *x_rato = j;
+                rato->y = i;
+                rato->x = j;
                 foostring [j] = ' ';
             }
             // Queijo? (não estou verificando se tem mais que 1 queijo!)
             else if (foostring [j] == 'q' || foostring [j] == 'Q')
             {
-                *y_queijo = i;
-                *x_queijo = j;
+                queijo->y = i;
+                queijo->x = j;
                 foostring [j] = ' ';
             }
 
             if (foostring [j] == ' ')
-                m [i][j] = CAMINHO;
+                lab->mat [i][j] = CAMINHO;
             else
-                m [i][j] = PAREDE;
+                lab->mat [i][j] = PAREDE;
         }
 
         // Lê outra linha. Não estou testando se está do tamanho certo!
-        if (!fgets (foostring, *w + 2, f))
+        if (!fgets (foostring, lab->w + 2, f))
             foostring [0] = 0; // Acabou.
-        foostring [*w] = 0;
+        foostring [lab->w] = 0;
     }
 
     // Mantém somente as linhas válidas.
-    *h = i;
-    m = realloc (m, sizeof (int*) * (*h));
+    lab->h = i;
+    lab->mat = realloc (lab->mat, sizeof (int*) * (lab->h));
 
     fclose (f);
 
-    return (m);
+    return (lab);
+}
+
+/*---------------------------------------------------------------------------*/
+/** Destruidor para o tipo Labirinto. Desaloca tudo!
+ *
+ * Parâmetros: Labirinto* lab: Labirinto para destruir.
+ *
+ * Valor de retorno: nenhum. */
+
+void destroiLabirinto (Labirinto* lab)
+{
+    // TODO: escreva esta função!
 }
 
 /*---------------------------------------------------------------------------*/
 /** Mostra o labirinto de um jeito "bonitinho".
  *
- * Parâmetros: int** lab: labirinto (ou matriz de custo).
- *             int w, int h: largura/altura do labirinto.
- *             int x_rato, int y_rato: coordenadas do rato.
- *             int x_queijo, int y_queijo: coordenadas do queijo.
+ * Parâmetros: Labirinto* lab: labirinto.
+ *             Coordenada2D pos_rato: coordenadas do rato.
+ *             Coordenada2D pos_queijo: coordenadas do queijo.
  *
  * Valor de retorno: nenhum. */
 
-void mostraLabirinto (int** lab, int w, int h, int x_rato, int y_rato, int x_queijo, int y_queijo)
+void mostraLabirinto (Labirinto* lab, Coordenada2D pos_rato, Coordenada2D pos_queijo)
 {
     int i, j;
 
-    for (i = 0; i < h; i++)
+    for (i = 0; i < lab->h; i++)
     {
-        for (j = 0; j < w; j++)
+        for (j = 0; j < lab->w; j++)
         {
-            if (i == y_rato && j == x_rato)
+            if (i == pos_rato.y && j == pos_rato.x)
                 printf ("R");
-            else if (i == y_queijo && j == x_queijo)
+            else if (i == pos_queijo.y && j == pos_queijo.x)
                 printf ("Q");
-            else if (lab [i][j] == PAREDE)
+            else if (lab->mat [i][j] == PAREDE)
                 printf ("|");
             else
                 printf (" ");
@@ -172,20 +204,76 @@ void mostraLabirinto (int** lab, int w, int h, int x_rato, int y_rato, int x_que
 }
 
 /*---------------------------------------------------------------------------*/
-/** Transforma a matriz dada em uma matriz de custo. Inicialmente, a matriz
- * contém somente os valores definidos pelas constantes PAREDE e CAMINHO, que
- * são negativos. A função deve substituir as posições contendo o valor para
- * o CAMINHO pela distância L1 até a posição do queijo.
+/** Transforma a matriz do labirinto dado em uma matriz de custo. Inicialmente,
+ * a matriz contém somente os valores definidos pelas constantes PAREDE e
+ * CAMINHO, que são negativos. A função deve substituir as posições contendo o
+ * valor para o CAMINHO pela distância L1 até a posição do queijo.
  *
- * Parâmetros: int** m: matriz de entrada e saída.
- *             int w, int h: largura/altura de m.
- *             int x_queijo, int y_queijo: coordenadas do queijo.
+ * Parâmetros: Labirinto* lab: labirinto para atualizar.
+ *             Coordenada2D pos_queijo: coordenadas do queijo.
  *
- * Valor de retorno: nenhum. A matriz m também é modificada. */
+ * Valor de retorno: nenhum. A matriz do labirinto é modificada. */
 
-void preencheMatrizCusto (int** m, int w, int h, int x_queijo, int y_queijo)
+void preencheMatrizCusto (Labirinto* lab, Coordenada2D pos_queijo)
 {
-    // TODO: escreva esta função!
+    int i, j, tam=0, cont=1, fila_Y, fila_X, pos_fila = 0;
+
+    for(i=0;i<lab->h;i++)
+        for(j=0;j<lab->w;j++)
+            if(lab->mat[i][j]==-1)
+                tam++;
+
+    //printf("%d", tam);
+    //system("pause");
+
+    Coordenada2D *fila;
+    fila = (Coordenada2D*) malloc (sizeof(Coordenada2D)*tam);
+
+    lab->mat[pos_queijo.y][pos_queijo.x]=0;
+    fila[0].y = pos_queijo.y;
+    fila[0].x = pos_queijo.x;
+
+    for(i=0;i<tam;i++)
+    {
+        fila_Y = fila[i].y;
+        fila_X = fila[i].x;
+
+        if(lab->mat[fila_Y - 1][fila_X]==-1)
+        {
+            lab->mat[fila_Y - 1][fila_X] = cont;
+            fila[pos_fila].y = fila_Y - 1;
+            fila[pos_fila].x = fila_X;
+            pos_fila++;
+
+        }
+
+        if(lab->mat[fila_Y + 1][fila_X]==-1)
+        {
+            lab->mat[fila_Y + 1][fila_X] = cont;
+            fila[pos_fila].y = fila_Y + 1;
+            fila[pos_fila].x = fila_X;
+            pos_fila++;
+
+        }
+        if(lab->mat[fila_Y][fila_X - 1]==-1)
+        {
+            lab->mat[fila_Y][fila_X - 1] = cont;
+            fila[pos_fila].y = fila_Y;
+            fila[pos_fila].x = fila_X - 1;
+            pos_fila++;
+
+        }
+        if(lab->mat[fila_Y][fila_X + 1]==-1)
+        {
+            lab->mat[fila_Y][fila_X + 1] = cont;
+            fila[pos_fila].y = fila_Y;
+            fila[pos_fila].x = fila_X + 1;
+            pos_fila++;
+
+        }
+        cont++;
+    }
+
 }
 
 /*---------------------------------------------------------------------------*/
@@ -212,56 +300,42 @@ void imprimeMatriz (int** m, int w, int h)
 }
 
 /*---------------------------------------------------------------------------*/
-/** Gera 2 vetores que armazenam o caminho do rato até o queijo, com base em
- * uma matriz de custo já preenchida corretamente. Os vetores são gerados com
- * alocação dinâmica, e devem ser desalocados pelo chamador.
+/** Gera um vetor que armazena o caminho do rato até o queijo, com base em uma
+ * matriz de custo já preenchida corretamente. O vetor é gerado com alocação
+ * dinâmica, e deve ser desalocado pelo chamador. Ele deve conter as
+ * coordenadas de cada posição do caminho, começando com a posição do rato e
+ * terminando com a posição do queijo.
  *
- * Parâmetros: int** m: matriz de custo já preenchida.
- *             int w, int h: largura/altura de m.
- *             int x_rato, int y_rato: coordenadas do rato.
- *             int** caminho_x, int** caminho_y: 2 ponteiros para os vetores de
- *               saída. Os vetores serão armazenados nesta função, e vão conter
- *               as coordenadas de cada posição do caminho, começando com a
- *               posição do rato e terminando com a posição do queijo.
+ * Parâmetros: Labirinto* lab: labirinto com a matriz de custo já preenchida.
+ *             Coordenada2D pos_rato: coordenadas do rato.
+ *             int* tam: parâmetro de saída para o tamanho do caminho (= o
+ *               número de valores no vetor que contém o caminho).
  *
- * Valor de retorno: o tamanho do caminho (= número de valores em caminho_x e
- *                   caminho_y). */
+ * Valor de retorno: o endereço do vetor alocado na função. */
 
-int calculaCaminho (int** m, int w, int h, int x_rato, int y_rato, int** caminho_x, int** caminho_y)
+Coordenada2D* calculaCaminho (Labirinto* lab, Coordenada2D pos_rato, int* tam)
 {
     // TODO: escreva esta função!
-
-    // Lembrete: para alocar um vetor de int em um ponteiro passado por referência:
-    // *vetor = (int*) malloc (sizeof (int) * tamanho);
-    //
-    // Neste caso, lembre-se de resolver os dois endereços ao usar o vetor:
-    // (*vetor) [i]
-    //
-    // Se preferir, você pode alocar um vetor normalmente, e só no final do processo atribuir o seu endereço à variável:
-    // vetor = (int*) malloc (sizeof (int) * tamanho);
-    // vetor [i] = ...
-    // *vetor_passado_por_ref = vetor
 }
 
 /*---------------------------------------------------------------------------*/
 /** Mostra o labirinto várias vezes, percorrendo o caminho.
  *
- * Parâmetros: int** m: matriz de custo.
- *             int w, int h: largura/altura de m.
- *             int x_queijo, int y_queijo: coordenadas do queijo.
- *             int* caminho_x, int* caminho_y: coordenadas do caminho.
- *             int tam: tamanho do caminho.
+ * Parâmetros: Labirinto* lab: labirinto para mostrar.
+ *             Coordenada2D pos_queijo: coordenadas do queijo.
+ *             Coordenada2D* caminho: vetor do caminho.
+ *             int tam: tamanho do vetor do caminho.
  *
  * Valor de retorno: nenhum. */
 
-void mostraCaminho (int** m, int w, int h, int x_queijo, int y_queijo, int* caminho_x, int* caminho_y, int tam)
+void mostraCaminho (Labirinto* lab, Coordenada2D pos_queijo, Coordenada2D* caminho, int tam)
 {
     int i;
 
     for (i = 0; i < tam; i++)
     {
         system (CLEAR);
-        mostraLabirinto (m, w, h, caminho_x [i], caminho_y [i], x_queijo, y_queijo);
+        mostraLabirinto (lab, caminho [i], pos_queijo);
         system ("pause");
     }
 }

@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1686680374 source:c:\users\fabri\downloads\programação\c-utfpr\labirinto\labirinto\main_labirinto.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

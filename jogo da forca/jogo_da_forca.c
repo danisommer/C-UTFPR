@@ -2,14 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <conio.h>
+
 #define N_PALAVRAS 33
 
 char* selecionaPalavra()
 {
+    int randIndex;
+    char *palavra;
     char *bancoDeDados[] = {"mula", "mamute", "arara", "hamster", "lesma","coala", "coelho", "tubarao", "bufalo", "leao", "egua", "mosquito", "tigre", "gafanhoto", "aguia", "formiga", "galo", "guaxinim", "ema", "rena", "sapo", "pinguim", "mamute", "javali", "hiena", "galo", "boi", "mosquito", "porco", "orangotango", "cavalo", "alce", "galinha"};
+
     srand(time(NULL));
-    return bancoDeDados[rand() % N_PALAVRAS];
+    randIndex = rand() % N_PALAVRAS;
+
+    palavra = (char*) malloc ((strlen(bancoDeDados[randIndex]) + 1) * sizeof(char));
+    strcpy(palavra, bancoDeDados[randIndex]);
+    return palavra;
 }
 
 void IniciaJogo(char *palavra, int n)
@@ -34,7 +41,7 @@ void IniciaJogo(char *palavra, int n)
         for (i = 0; i < 26; i++)
             if (letrasUsadas[i])
                 printf("%c ", 'a' + i);
-        
+
         printf("\n");
 
         if (erros == 0)
@@ -56,10 +63,13 @@ void IniciaJogo(char *palavra, int n)
         }
 
         char letra;
-        printf("Digite uma letra: ");
+        printf("Digite uma letra minuscula: ");
         scanf(" %c", &letra);
 
-        letrasUsadas[letra - 'a'] = 1; 
+        if (letrasUsadas[letra - 'a'])
+            continue;
+
+        letrasUsadas[letra - 'a'] = 1;
 
         int encontrou = 0;
         for (i = 0; i < tam; i++)
@@ -77,16 +87,15 @@ void IniciaJogo(char *palavra, int n)
     printf("Palavra: ");
     for (i = 0; i < tam; i++)
         printf("%c", palavra[i]);
-    
+
     printf("\n");
 
     if (acertos == tam)
-        printf("Parabens, voce venceu!\n");
+        printf("Parabens, voce venceu!\n\n");
     else
-        printf("Voce perdeu! Tente novamente.\n");
+        printf("Voce perdeu! Tente novamente.\n\n");
 
-    printf("\npressione qualquer tecla para reiniciar ");
-    getch();
+    system("pause");
 }
 int main()
 {
@@ -94,8 +103,8 @@ int main()
     int tentativas = 6;
     while(1)
     {
-    palavra = selecionaPalavra();
-    IniciaJogo(palavra, tentativas);
+        palavra = selecionaPalavra();
+        IniciaJogo(palavra, tentativas);
     }
     return 0;
 }

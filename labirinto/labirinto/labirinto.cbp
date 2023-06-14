@@ -31,9 +31,6 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="labirinto.cbp" />
-		<Unit filename="labirinto.layout" />
-		<Unit filename="labirinto.pdf" />
 		<Unit filename="main_labirinto.c">
 			<Option compilerVar="CC" />
 		</Unit>
