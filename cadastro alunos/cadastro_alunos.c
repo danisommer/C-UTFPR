@@ -8,36 +8,22 @@
 #define NOTA_MINIMA_APROVACAO 6.0
 
 typedef struct {
-    char *nome;
-    char *curso;
-    float *notas;
+    char nome[100];
+    char curso[100];
+    float notas[N_PROVAS];
     int idade;
     int notasInseridas;
     float media;
     int aprovado;
 } Cadastro;
 
-int validarNome(const char *nome) {
-    size_t tamanho = strlen(nome);
+int validarString(const char *str) {
+    size_t tamanho = strlen(str);
     if (tamanho == 0 || tamanho > 100)
         return 0;
 
     for (size_t i = 0; i < tamanho; i++) {
-        if (!isalpha(nome[i]) && !isspace(nome[i])) {
-            return 0;
-        }
-    }
-
-    return 1;
-}
-
-int validarCurso(const char *curso) {
-    size_t tamanho = strlen(curso);
-    if (tamanho == 0 || tamanho > 100)
-        return 0;
-
-    for (size_t i = 0; i < tamanho; i++) {
-        if (!isalpha(curso[i]) && !isspace(curso[i])) {
+        if (!isalpha(str[i]) && !isspace(str[i])) {
             return 0;
         }
     }
@@ -56,57 +42,52 @@ int cadastrarAlunos(Cadastro **alunos, int *cadastrados) {
         return *cadastrados;
     }
 
-    alunos[*cadastrados] = (Cadastro *)malloc(sizeof(Cadastro));
-    alunos[*cadastrados]->nome = (char *)malloc(100 * sizeof(char));
-    alunos[*cadastrados]->curso = (char *)malloc(100 * sizeof(char));
+    Cadastro *aluno = (Cadastro *)malloc(sizeof(Cadastro));
 
-    system("cls");
     printf("\nNome: ");
-    fgets(alunos[*cadastrados]->nome, 100, stdin);
-    alunos[*cadastrados]->nome[strcspn(alunos[*cadastrados]->nome, "\n")] = '\0';
+    fgets(aluno->nome, sizeof(aluno->nome), stdin);
+    aluno->nome[strcspn(aluno->nome, "\n")] = '\0';
 
-    while (!validarNome(alunos[*cadastrados]->nome)) {
-        printf("Nome inválido. Insira novamente: ");
-        fgets(alunos[*cadastrados]->nome, 100, stdin);
-        alunos[*cadastrados]->nome[strcspn(alunos[*cadastrados]->nome, "\n")] = '\0';
+    while (!validarString(aluno->nome)) {
+        printf("Nome invalido. Insira novamente: ");
+        fgets(aluno->nome, sizeof(aluno->nome), stdin);
+        aluno->nome[strcspn(aluno->nome, "\n")] = '\0';
     }
 
     printf("\nCurso: ");
-    fgets(alunos[*cadastrados]->curso, 100, stdin);
-    alunos[*cadastrados]->curso[strcspn(alunos[*cadastrados]->curso, "\n")] = '\0';
+    fgets(aluno->curso, sizeof(aluno->curso), stdin);
+    aluno->curso[strcspn(aluno->curso, "\n")] = '\0';
 
-    while (!validarCurso(alunos[*cadastrados]->curso)) {
-        printf("Curso inválido. Insira novamente: ");
-        fgets(alunos[*cadastrados]->curso, 100, stdin);
-        alunos[*cadastrados]->curso[strcspn(alunos[*cadastrados]->curso, "\n")] = '\0';
+    while (!validarString(aluno->curso)) {
+        printf("Curso invalido. Insira novamente: ");
+        fgets(aluno->curso, sizeof(aluno->curso), stdin);
+        aluno->curso[strcspn(aluno->curso, "\n")] = '\0';
     }
 
     printf("\nIdade: ");
-    scanf("%d", &alunos[*cadastrados]->idade);
+    scanf("%d", &aluno->idade);
     getchar();
 
-    while (!validarIdade(alunos[*cadastrados]->idade)) {
-        printf("Idade inválida. Insira novamente: ");
-        scanf("%d", &alunos[*cadastrados]->idade);
+    while (!validarIdade(aluno->idade)) {
+        printf("Idade invalida. Insira novamente: ");
+        scanf("%d", &aluno->idade);
         getchar();
     }
 
-    alunos[*cadastrados]->notas = NULL;
-    alunos[*cadastrados]->notasInseridas = 0;
-    alunos[*cadastrados]->media = 0.0;
-    alunos[*cadastrados]->aprovado = 0;
+    aluno->notasInseridas = 0;
+    aluno->media = 0.0;
+    aluno->aprovado = 0;
 
+    alunos[*cadastrados] = aluno;
     (*cadastrados)++;
     return *cadastrados;
 }
 
 void inserirNotas(Cadastro **alunos, int cadastrados) {
-    system("cls");
     printf("Insira as notas dos alunos:\n");
     for (int i = 0; i < cadastrados; i++) {
         if (!alunos[i]->notasInseridas) {
             printf("\nAluno: %s\n", alunos[i]->nome);
-            alunos[i]->notas = (float *)malloc(N_PROVAS * sizeof(float));
             for (int j = 0; j < N_PROVAS; j++) {
                 printf("Nota %d: ", j + 1);
                 scanf("%f", &alunos[i]->notas[j]);
@@ -134,11 +115,7 @@ void calcularMedia(Cadastro **alunos, int cadastrados) {
 void verificarAprovacao(Cadastro **alunos, int cadastrados) {
     for (int i = 0; i < cadastrados; i++) {
         if (alunos[i]->notasInseridas) {
-            if (alunos[i]->media >= NOTA_MINIMA_APROVACAO) {
-                alunos[i]->aprovado = 1;
-            } else {
-                alunos[i]->aprovado = 0;
-            }
+            alunos[i]->aprovado = alunos[i]->media >= NOTA_MINIMA_APROVACAO ? 1 : 0;
         }
     }
 }
@@ -152,10 +129,8 @@ void imprimeAlunos(Cadastro **alunos, int cadastrados) {
     system("cls");
     for (int i = 0; i < cadastrados; i++) {
         printf("------------------------------\n");
-        printf("ALUNO %d:\n", i);
-        printf("Nome: %s | ", alunos[i]->nome);
-        printf("Curso: %s |", alunos[i]->curso);
-        printf("Idade: %d\n", alunos[i]->idade);
+        printf("ALUNO %d:\n", i + 1);
+        printf("Nome: %s | Curso: %s | Idade: %d\n", alunos[i]->nome, alunos[i]->curso, alunos[i]->idade);
     }
     system("pause");
 }
@@ -166,7 +141,7 @@ void imprimeNotas(Cadastro **alunos, int cadastrados) {
     for (int i = 0; i < cadastrados; i++) {
         if (alunos[i]->notasInseridas) {
             printf("------------------------------\n");
-            printf("ALUNO %d:\n", i);
+            printf("ALUNO %d:\n", i + 1);
             printf("Nome: %s\n", alunos[i]->nome);
             printf("Notas: ");
             for (int j = 0; j < N_PROVAS; j++) {
@@ -174,11 +149,7 @@ void imprimeNotas(Cadastro **alunos, int cadastrados) {
             }
             printf("\n");
             printf("Media: %.2f | ", alunos[i]->media);
-            if (alunos[i]->aprovado) {
-                printf("Aprovado\n");
-            } else {
-                printf("Reprovado\n");
-            }
+            printf(alunos[i]->aprovado ? "Aprovado\n" : "Reprovado\n");
         }
     }
     system("pause");
@@ -213,7 +184,7 @@ int main() {
                 printf("Adeus :)\n");
                 break;
             default:
-                printf("Opcao invalida!\n");
+                printf("Opção invalida!\n");
                 break;
         }
     }
