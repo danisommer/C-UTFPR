@@ -31,7 +31,7 @@ void exibirTabuleiro(char **tabuleiro, int lin, int col){
     printf("\n");
 
     for (int i = 0; i < lin; i++){
-        printf(" %2d ", i);
+        printf(" %2d ", lin-i-1);
         for (int j = 0; j < col; j++)
             if (tabuleiro[i][j] == 'N' || tabuleiro[i][j] == 'X' || tabuleiro[i][j] == 'O')
                 printf("%c ", tabuleiro[i][j]);
@@ -46,12 +46,11 @@ void exibirTabuleiro(char **tabuleiro, int lin, int col){
 }
 
 void posicionarNavios(char **resultado, int lin, int col, int n_barcos){
-    int navioscolocados = 0;
-    int ale1, ale2;
-    int largura;
+
+    int navioscolocados = 0, ale1, ale2, largura;
 
     while (navioscolocados < n_barcos){
-        largura = LARGURA_MAX - rand()%3; //no m�nimo 3 e no maximo 5
+        largura = LARGURA_MAX - rand()%4; //no minimo 2 e no maximo 5
 
         int orientacao = rand() % 2; // 0: horizontal, 1: vertical
 
@@ -120,6 +119,7 @@ void realizarJogada(char **jogo, char **resultado, int *naviosRestantes, int lin
             break;
         printf("\nDigite as coordenadas: ");
         scanf(" %c%d", &x, &y);
+        y = lin - y - 1;
 
         if(x>='a'&&x<='z')
             x-='a';
@@ -189,10 +189,14 @@ int main(){
     while(n_barcos < 1||min>26){
         limparTela();
         printf("== BATALHA NAVAL ==\n");
+        printf("Facil - 1 a 10 barcos\n");
+        printf("Medio - 11 a 20 barcos\n");
+        printf("Dificil - 21 a 40 barcos\n");
+        printf("Impossivel - +40 barcos\n");
         printf("\nDigite o numero de barcos: ");
         scanf("%d", &n_barcos);
         area_min = n_barcos * LARGURA_MAX;
-        min = sqrt(area_min)+2;
+        min = sqrt(area_min)+3;
     }
 
     while (lin < min || lin > 26 || col < min || col > 26) {
