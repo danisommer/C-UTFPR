@@ -123,12 +123,10 @@ void realizarJogada(char **jogo, char **resultado, int *naviosRestantes, int lin
             scanf(" %c%d", &x, &y);
             y = lin - y - 1;
 
-
             if(x>='a'&&x<='z')
                 x-='a';
             else if (x>='A'&&x<='Z')
                 x -= 'A';
-
 
             else {
                 printf("Coordenadas invalidas! Ex de coordenadas: A5, F4, G8\n");
@@ -136,6 +134,57 @@ void realizarJogada(char **jogo, char **resultado, int *naviosRestantes, int lin
             }
         } else {
             // Jogada automática do jogador 2 (bot)
+            if (resultado[y][x] == 'X') {
+                int posX, posY;
+                int encontrouPosicao = 0;
+
+                // Encontra uma posição próxima válida para atacar
+                for (int i = 0; i < lin && !encontrouPosicao; i++) {
+                    for (int j = 0; j < col && !encontrouPosicao; j++) {
+                        if (jogo[i][j] == 'X') {
+                            // Verifica se pode atacar na posição à direita
+                            if (j + 1 < col && jogo[i][j + 1] == '-') {
+                                posX = j + 1;
+                                posY = i;
+                                encontrouPosicao = 1;
+                            }
+                            // Verifica se pode atacar na posição à esquerda
+                            else if (j - 1 >= 0 && jogo[i][j - 1] == '-') {
+                                posX = j - 1;
+                                posY = i;
+                                encontrouPosicao = 1;
+                            }
+                            // Verifica se pode atacar na posição acima
+                            else if (i - 1 >= 0 && jogo[i - 1][j] == '-') {
+                                posX = j;
+                                posY = i - 1;
+                                encontrouPosicao = 1;
+                            }
+                            // Verifica se pode atacar na posição abaixo
+                            else if (i + 1 < lin && jogo[i + 1][j] == '-') {
+                                posX = j;
+                                posY = i + 1;
+                                encontrouPosicao = 1;
+                            }
+                        }
+                    }
+                }
+
+                if (encontrouPosicao) {
+                    x = posX;
+                    y = posY;
+                } else {
+                    // Caso não tenha encontrado uma posição próxima válida, realiza uma jogada aleatória
+                    x = rand() % col;
+                    y = rand() % lin;
+
+                    while (jogo[y][x] != '-') {
+                        x = rand() % col;
+                        y = rand() % lin;
+                    }
+                }
+            } else {
+                // Realiza uma jogada aleatória
                 x = rand() % col;
                 y = rand() % lin;
 
@@ -143,10 +192,8 @@ void realizarJogada(char **jogo, char **resultado, int *naviosRestantes, int lin
                     x = rand() % col;
                     y = rand() % lin;
                 }
-
-                printf("\nJogador 2 (Bot) jogou em: %c%d\n", 'A' + x, y);
-
-
+            }
+            printf("\nJogador 2 (Bot) jogou em: %c%d\n", 'A' + x, y);
         }
 
         if (x >= 0 && x < col && y >= 0 && y < lin){
