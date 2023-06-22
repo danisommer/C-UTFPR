@@ -166,7 +166,7 @@ void realizarJogada(char **jogo, char **resultado, int *naviosRestantes, int lin
             if (dificuldade == 0)
             {
 
-                printf("\nDigite as coordenadas: ");
+                printf("\nDigite as coordenadas do seu ataque: ");
                 scanf(" %c%d", &x, &y);
                 while (getchar() != '\n');
                 y = lin - y - 1;
@@ -382,14 +382,14 @@ int main()
     {
         limparTela();
         printf("== BATALHA NAVAL ==\n");
-        printf("1) Um jogador (contra bot)\n2) Dois Jogadores\nEscolha o modo de jogo: ");
+        printf("\n1) Um jogador (contra bot).\n2) Dois Jogadores.\n\nEscolha o modo de jogo: ");
         scanf("%d", &modo_de_jogo);
         while (getchar() != '\n');
-        printf("\nFacil - 1 a 10 barcos\n");
-        printf("Medio - 11 a 20 barcos\n");
-        printf("Dificil - 21 a 40 barcos\n");
-        printf("Impossivel - +40 barcos\n");
-        printf("\nDigite o numero de barcos: ");
+        printf("\n1 a 10 barcos: Facil\n");
+        printf("11 a 20 barcos: Medio\n");
+        printf("21 a 40 barcos: Dificil\n");
+        printf("+40 barcos: Impossivel\n");
+        printf("\nEscolha o numero de barcos: ");
         scanf("%d", &n_barcos);
         while (getchar() != '\n');
         area_min = n_barcos * LARGURA_MAX;
@@ -400,7 +400,7 @@ int main()
     {
         limparTela();
         printf("== BATALHA NAVAL ==\n");
-        printf("REGRAS DO JOGO:\n\n");
+        printf("\nREGRAS DO JOGO:\n\n");
         printf("- O jogo eh jogado por dois jogadores.\n");
         printf("- Cada jogador tem seu proprio tabuleiro dividido em uma grade 10x10.\n");
         printf("- Cada jogador possui quatro navios, cada um com largura variavel, entre 3 e 5 celulas.\n");
@@ -411,12 +411,11 @@ int main()
         printf("- Se um tiro nao acerta um navio do oponente, o jogo marca o local como 'O'.\n");
         printf("- Um navio eh considerado afundado quando todas as celulas ocupadas por ele sao atingidas.\n");
         printf("- O primeiro jogador a afundar todos os navios do oponente eh o vencedor.\n");
-        printf("\nDigite o numero de linhas e colunas desejados:\n");
-        printf("linhas (minimo: %d, maximo: 26): ", min);
-
+        printf("\nDigite o numero de linhas e colunas desejados para o tabuleiro:\n");
+        printf("\nLinhas (minimo: %d, maximo: 26): ", min);
         scanf("%d", &lin);
         while (getchar() != '\n');
-        printf("colunas (minimo: %d, maximo: 26): ", min);
+        printf("\nColunas (minimo: %d, maximo: 26): ", min);
         scanf("%d", &col);
         while (getchar() != '\n');
     }
@@ -424,7 +423,7 @@ int main()
     {
         while(dificuldade > 5 || dificuldade <= 0)
         {
-            printf("\nDigite a dificuldade desejada:\n1) Facil\n2) Medio\n3) Dificil\n4) Impossivel\n5) HACKER\nDificuldade: ");
+            printf("\nEscolha a dificuldade do seu oponente:\n1) Facil\n2) Medio\n3) Dificil\n4) Impossivel\n5) HACKER\nDificuldade: ");
             scanf("%d", &dificuldade);
             while (getchar() != '\n');
 
@@ -481,8 +480,7 @@ int main()
                 break;
             }
 
-            printf("\nPressione enter para passar a vez...\n");
-            getchar();
+            printf("\nPressione enter para continuar...\n");
             getchar();
 
             vezDoJogador = 2;
@@ -528,7 +526,6 @@ int main()
                 }
 
                 printf("\nPressione enter para continuar...\n");
-                getchar();
                 getchar();
                 vezDoJogador = 1;
 
