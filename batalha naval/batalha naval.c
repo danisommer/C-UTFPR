@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <windows.h>
 
 #define LARGURA_MAX 5
 
@@ -282,6 +283,7 @@ void realizarJogada(char ** jogo, char ** resultado, int * naviosRestantes, int 
             printf("Ataque do Jogador 2 (bot):\n");
             exibirTabuleiro(jogo, lin, col);
             printf("\nJogador 2 jogou em: %c%d\n", 'A' + x, lin - y - 1);
+            Sleep(600);
           }
         }
       }
@@ -345,7 +347,6 @@ int main() {
       printf("\nEscolha a dificuldade do seu oponente:\n1) Facil\n2) Medio\n3) Dificil\n4) Impossivel\n5) HACKER\nDificuldade: ");
       scanf("%d", & dificuldade);
       while (getchar() != '\n');
-
     }
   }
 
@@ -456,7 +457,6 @@ int main() {
         vezDoJogador = 1;
 
       }
-
     }
   }
 
